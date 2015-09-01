@@ -1,6 +1,6 @@
 <?php
 
-namespace Molengo;
+namespace Molengo\Xml;
 
 /**
  * XmlValidation utils
