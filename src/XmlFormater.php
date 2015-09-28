@@ -1,6 +1,6 @@
 <?php
 
-namespace Molengo;
+namespace Odan\Xml;
 
 /**
  * XmlFormater utils

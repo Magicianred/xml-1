@@ -1,9 +1,9 @@
 {
-    "name": "odan/molengo-xml",
+    "name": "odan/xml",
     "type": "library",
     "description": "Xml validator and beautifier",
     "keywords": ["library", "xml", "xsd", "validation", "beautifier", "formater"],
-    "homepage": "http://github.com/odan/molengo-xml",
+    "homepage": "http://github.com/odan/xml",
     "license": "MIT",
     "authors": [
         {
@@ -16,13 +16,13 @@
         "php": ">=5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.6.*",
+        "phpunit/phpunit": "4.8.*",
         "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "psr-4": {
-            "Molengo\\Xml\\": "src/Molengo/Xml",
-            "Molengo\\Test\\": "tests"
+            "Odan\\Xml\\": "src",
+            "Odan\\Test\\": "tests"
         }
     }
 }
