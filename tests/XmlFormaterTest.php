@@ -4,20 +4,23 @@ namespace Odan\Test;
 
 use Odan\Xml\XmlFormater;
 use PHPUnit\Framework\TestCase;
+use org\bovigo\vfs\vfsStream;
 
 class XmlFormaterTest extends TestCase
 {
     protected $xmlFormater;
 
+    protected $root;
+
     protected function setUp()
     {
         $this->xmlFormater = new XmlFormater();
+        $this->root = vfsStream::setup("myrootdir");
     }
 
     protected function tearDown()
     {
         $this->xmlFormater = null;
-        @unlink(__DIR__.'/note_format.xml');
     }
 
     public function testFormatString()
@@ -33,6 +36,6 @@ class XmlFormaterTest extends TestCase
 
     public function testFormatFileWithDestinationFile()
     {
-        $this->assertTrue($this->xmlFormater->formatFile(__DIR__.'/note.xml', __DIR__.'/note_format.xml'));
+        $this->assertTrue($this->xmlFormater->formatFile(__DIR__.'/note.xml', vfsStream::url('myrootdir/note_format.xml')));
     }
 }
