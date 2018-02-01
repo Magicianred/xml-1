@@ -2,16 +2,19 @@ language: php
 php:
   - 5.5
   - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
   - nightly
 
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
   - mysql -e 'create database molengo_test;'
-  
+
 script:
   - mkdir -p build/logs
-  - ./vendor/bin/phpunit -c phpunit.xml --debug --coverage-clover build/logs/clover.xml
-  
+  - ./vendor/bin/phpunit --debug --coverage-clover build/logs/clover.xml
+
 after_script:
   - php vendor/bin/coveralls -v

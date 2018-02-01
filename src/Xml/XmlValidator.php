@@ -71,7 +71,7 @@ class XmlValidator
         // the validation root error
         $xml->loadXML($xml->saveXML());
 
-        if (!$xml->schemaValidateSource($xsdSource)) {
+        if (!$xml->schemaValidate($xsdSource)) {
             // Not valid
             $errors = libxml_get_errors();
             foreach ($errors as $error) {
