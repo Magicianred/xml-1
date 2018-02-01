@@ -17,7 +17,7 @@ class XmlFormater
      * XML beautifier
      *
      * @param string $content
-     * @return string pretty xml string
+     * @return string pretty XML string
      */
     public function formatString($content)
     {
@@ -26,6 +26,7 @@ class XmlFormater
         $xml->formatOutput = true;
         $xml->loadXML($content);
         $result = $xml->saveXML();
+
         return $result;
     }
 
@@ -34,7 +35,7 @@ class XmlFormater
      *
      * @param string $fileName
      * @param string $fileNameDestination
-     * @return boolean
+     * @return bool Success
      */
     public function formatFile($fileName, $fileNameDestination = null)
     {
@@ -46,6 +47,7 @@ class XmlFormater
             $fileNameDestination = $fileName;
         }
         $result = ($xml->save($fileNameDestination) !== false);
+
         return $result;
     }
 }
