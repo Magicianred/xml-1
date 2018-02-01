@@ -9,7 +9,6 @@ php:
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source
-  - mysql -e 'create database molengo_test;'
 
 script:
   - mkdir -p build/logs
