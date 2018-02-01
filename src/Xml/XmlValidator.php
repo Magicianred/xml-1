@@ -2,11 +2,10 @@
 
 namespace Odan\Xml;
 
+use DOMDocument;
+
 /**
- * XmlValidation utils
- *
- * @copyright 2016 odan
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * Xml validator
  */
 class XmlValidator
 {
@@ -26,7 +25,7 @@ class XmlValidator
         libxml_use_internal_errors(true);
         libxml_clear_errors();
 
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $xml->load($xmlFile);
         if (!$xml->schemaValidate($xsdFile)) {
             // Not valid
@@ -48,17 +47,18 @@ class XmlValidator
             }
         }
         libxml_clear_errors();
+
         return $results;
     }
 
     /**
      * Validate XML-File against XSD-File (Schema)
      *
-     * @param \DOMDocument $xml xml document
+     * @param DOMDocument $xml xml document
      * @param string $xsdSource A string containing the schema
      * @return array if not valid an array with errors
      */
-    public function validateDom(\DOMDocument $xml, $xsdSource)
+    public function validateDom(DOMDocument $xml, $xsdSource)
     {
         $results = array();
 
@@ -86,6 +86,7 @@ class XmlValidator
             }
         }
         libxml_clear_errors();
+
         return $results;
     }
 
@@ -94,6 +95,7 @@ class XmlValidator
      * XML files against the same XML schema (XSD) (13865149)
      *
      * @return void
+     * @todo Remove TMP constant
      */
     public function enableXsdCache()
     {
@@ -114,6 +116,7 @@ class XmlValidator
             $content = file_get_contents($system);
             file_put_contents($cachedFile, $content);
             chmod($cachedFile, 0775);
+
             return $cachedFile;
         });
     }

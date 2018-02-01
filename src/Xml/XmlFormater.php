@@ -2,6 +2,8 @@
 
 namespace Odan\Xml;
 
+use DOMDocument;
+
 /**
  * XmlFormater utils
  *
@@ -19,7 +21,7 @@ class XmlFormater
      */
     public function formatString($content)
     {
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         $xml->loadXML($content);
@@ -36,7 +38,7 @@ class XmlFormater
      */
     public function formatFile($fileName, $fileNameDestination = null)
     {
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
         $xml->load($fileName);
