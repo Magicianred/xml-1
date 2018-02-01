@@ -1,35 +1,41 @@
 {
-    "name": "odan/xml",
-    "type": "library",
-    "description": "Xml validator and beautifier",
-    "keywords": ["library", "xml", "xsd", "validation", "beautifier", "formater"],
-    "homepage": "http://github.com/odan/xml",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "odan",
-            "email": "support@molengo.com",
-            "homepage": "http://www.molengo.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.5",
-        "ext-dom": "*",
-        "ext-xml": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8",
-        "php-coveralls/php-coveralls": "dev-master",
-        "mikey179/vfsStream": "^1.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "Odan\\Xml\\": "src/Xml"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Odan\\Test\\": "tests"
-        }
+  "name": "odan/xml",
+  "type": "library",
+  "description": "Xml validator and beautifier",
+  "keywords": [
+    "library",
+    "xml",
+    "xsd",
+    "validation",
+    "beautifier",
+    "formater"
+  ],
+  "homepage": "http://github.com/odan/xml",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5",
+    "ext-dom": "*",
+    "ext-xml": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8",
+    "php-coveralls/php-coveralls": "dev-master",
+    "mikey179/vfsStream": "^1.6"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
+    "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+    "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit -n --no-patch 1 src tests"
+  },
+  "autoload": {
+    "psr-4": {
+      "Odan\\Xml\\": "src/Xml"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Odan\\Test\\": "tests"
+    }
+  }
 }

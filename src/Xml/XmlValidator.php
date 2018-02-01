@@ -97,8 +97,7 @@ class XmlValidator
      */
     public function enableXsdCache()
     {
-        libxml_set_external_entity_loader(
-            function ($public, $system, $context) {
+        libxml_set_external_entity_loader(function ($public, $system, $context) {
             if (is_file($system)) {
                 return $system;
             }
@@ -116,7 +115,6 @@ class XmlValidator
             file_put_contents($cachedFile, $content);
             chmod($cachedFile, 0775);
             return $cachedFile;
-        }
-        );
+        });
     }
 }
