@@ -10,12 +10,12 @@ use PHPUnit\Framework\TestCase;
 class XmlFormaterTest extends TestCase
 {
     /**
-     * @var XmlFormater
+     * @var XmlFormater|null
      */
     protected $xmlFormater;
 
     /**
-     * @var vfsStreamDirectory
+     * @var vfsStreamDirectory|null
      */
     protected $root;
 

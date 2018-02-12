@@ -2,14 +2,15 @@
 
 namespace Odan\Test;
 
-use DomDocument;
+use DOMDocument;
 use Odan\Xml\XmlValidator;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 class XmlValidatorTest extends TestCase
 {
     /**
-     * @var XmlValidator
+     * @var XmlValidator|null
      */
     protected $xmlValidator;
 
@@ -37,18 +38,33 @@ class XmlValidatorTest extends TestCase
 
     public function testValidateDom()
     {
-        $xml = new DomDocument();
+        $xml = new DOMDocument();
         $xml->load(__DIR__ . '/note.xml');
         $this->assertInternalType('array', $this->xmlValidator->validateDom($xml, __DIR__ . '/schema.xsd'));
     }
 
     public function testValidateDomWithInvalidXsd()
     {
-        $xml = new DomDocument();
+        $xml = new DOMDocument();
         $xml->load(__DIR__ . '/note.xml');
         $result = $this->xmlValidator->validateDom($xml, __DIR__ . '/invalid_schema.xsd');
-        var_dump($result);
+
         $this->assertInternalType('array', $result);
         $this->assertSame(2, $result[0]->level);
+    }
+
+    public function testEnableXsdCache()
+    {
+        $path = vfsStream::url('root/cache');
+
+        $this->xmlValidator->enableXsdCache($path);
+        $result = $this->xmlValidator->validateFile(__DIR__ . '/external.xml', __DIR__ . '/external.xsd');
+
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
+
+        $result = $this->xmlValidator->validateFile(__DIR__ . '/external.xml', __DIR__ . '/external.xsd');
+        $this->assertInternalType('array', $result);
+        $this->assertEmpty($result);
     }
 }

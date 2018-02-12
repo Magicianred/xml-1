@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.java2s.com"
+            xmlns="http://www.java2s.com"
+            elementFormDefault="qualified">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+                schemaLocation="external_xml.xsd"/>
+    <xsd:element name="Books">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Book" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Title" type="xsd:string"/>
+                            <xsd:element name="Author" type="xsd:string"/>
+                            <xsd:element name="Date" type="xsd:string"/>
+                            <xsd:element name="ISBN" type="xsd:string"/>
+                            <xsd:element name="Publisher" type="xsd:string"/>
+                        </xsd:sequence>
+                        <xsd:attribute ref="xml:lang"/>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

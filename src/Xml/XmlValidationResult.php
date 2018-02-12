@@ -38,5 +38,4 @@ class XmlValidationResult
      * @var int
      */
     public $column;
-
 }

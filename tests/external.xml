@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Books xmlns="http://www.java2s.com"
+       xmlns:xml="http://www.w3.org/XML/1998/namespace"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=
+               "http://www.java2s.com
+                           Schema.xsd
+                           http://www.w3.org/XML/1998/namespace
+                           xml.xsd">
+    <Book xml:lang="EN">
+        <Title>title1</Title>
+        <Author>author1</Author>
+        <Date>1998</Date>
+        <ISBN>1-11111-111-1</ISBN>
+        <Publisher>publisher1</Publisher>
+    </Book>
+    <Book xml:lang="EN">
+        <Title>title2</Title>
+        <Author>author2</Author>
+        <Date>1977</Date>
+        <ISBN>2-222-22222-2</ISBN>
+        <Publisher>publisher2</Publisher>
+    </Book>
+</Books>

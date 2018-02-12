@@ -29,6 +29,7 @@ class XmlValidator
         $xml->load($xmlFile);
         if (!$xml->schemaValidate($xsdFile)) {
             // Not valid
+
             $xmlLines = explode("\n", file_get_contents($xmlFile));
             $errors = libxml_get_errors();
             foreach ($errors as $error) {
@@ -104,6 +105,7 @@ class XmlValidator
     {
         libxml_set_external_entity_loader(function ($public, $system, $context) use ($path) {
             if (is_file($system)) {
+                echo $system;
                 return $system;
             }
 
@@ -118,6 +120,7 @@ class XmlValidator
             }
 
             // Download XSD file from web
+            $system = str_replace('file:/', '', $system);
             $content = file_get_contents($system);
             file_put_contents($cachedFile, $content);
             chmod($cachedFile, 0775);
