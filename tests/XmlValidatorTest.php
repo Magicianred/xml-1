@@ -2,12 +2,16 @@
 
 namespace Odan\Test;
 
+use DomDocument;
 use Odan\Xml\XmlValidator;
 use PHPUnit\Framework\TestCase;
 
 class XmlValidatorTest extends TestCase
 {
-    protected $xmlValidater;
+    /**
+     * @var XmlValidator
+     */
+    protected $xmlValidator;
 
     protected function setUp()
     {
@@ -21,29 +25,30 @@ class XmlValidatorTest extends TestCase
 
     public function testValidateFile()
     {
-        $this->assertInternalType('array', $this->xmlValidator->validateFile(__DIR__.'/note.xml', __DIR__.'/schema.xsd'));
+        $this->assertInternalType('array', $this->xmlValidator->validateFile(__DIR__ . '/note.xml', __DIR__ . '/schema.xsd'));
     }
 
     public function testValidateFileWithInvalidXsd()
     {
-        $result = $this->xmlValidator->validateFile(__DIR__.'/note.xml', __DIR__.'/invalid_schema.xsd');
+        $result = $this->xmlValidator->validateFile(__DIR__ . '/note.xml', __DIR__ . '/invalid_schema.xsd');
         $this->assertInternalType('array', $result);
-        $this->assertSame(2, $result[0]['level']);
+        $this->assertSame(2, $result[0]->level);
     }
 
     public function testValidateDom()
     {
-        $xml = new \DomDocument();
-        $xml->load(__DIR__.'/note.xml');
-        $this->assertInternalType('array', $this->xmlValidator->validateDom($xml, __DIR__.'/schema.xsd'));
+        $xml = new DomDocument();
+        $xml->load(__DIR__ . '/note.xml');
+        $this->assertInternalType('array', $this->xmlValidator->validateDom($xml, __DIR__ . '/schema.xsd'));
     }
 
     public function testValidateDomWithInvalidXsd()
     {
-        $xml = new \DomDocument();
-        $xml->load(__DIR__.'/note.xml');
-        $result = $this->xmlValidator->validateDom($xml, __DIR__.'/invalid_schema.xsd');
+        $xml = new DomDocument();
+        $xml->load(__DIR__ . '/note.xml');
+        $result = $this->xmlValidator->validateDom($xml, __DIR__ . '/invalid_schema.xsd');
+        var_dump($result);
         $this->assertInternalType('array', $result);
-        $this->assertSame(2, $result[0]['level']);
+        $this->assertSame(2, $result[0]->level);
     }
 }

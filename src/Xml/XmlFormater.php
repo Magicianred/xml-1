@@ -5,10 +5,7 @@ namespace Odan\Xml;
 use DOMDocument;
 
 /**
- * XmlFormater utils
- *
- * @copyright 2016 odan
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * XmlFormater
  */
 class XmlFormater
 {
@@ -19,7 +16,7 @@ class XmlFormater
      * @param string $content
      * @return string pretty XML string
      */
-    public function formatString($content)
+    public function formatString(string $content): string
     {
         $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
@@ -37,7 +34,7 @@ class XmlFormater
      * @param string $fileNameDestination
      * @return bool Success
      */
-    public function formatFile($fileName, $fileNameDestination = null)
+    public function formatFile($fileName, $fileNameDestination = null): bool
     {
         $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;

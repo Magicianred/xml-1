@@ -3,19 +3,26 @@
 namespace Odan\Test;
 
 use Odan\Xml\XmlFormater;
-use PHPUnit\Framework\TestCase;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\TestCase;
 
 class XmlFormaterTest extends TestCase
 {
+    /**
+     * @var XmlFormater
+     */
     protected $xmlFormater;
 
+    /**
+     * @var vfsStreamDirectory
+     */
     protected $root;
 
     protected function setUp()
     {
         $this->xmlFormater = new XmlFormater();
-        $this->root = vfsStream::setup("myrootdir");
+        $this->root = vfsStream::setup("root");
     }
 
     protected function tearDown()
@@ -31,11 +38,11 @@ class XmlFormaterTest extends TestCase
 
     public function testFormatFileWithNoDestinationFile()
     {
-        $this->assertTrue($this->xmlFormater->formatFile(__DIR__.'/note.xml'));
+        $this->assertTrue($this->xmlFormater->formatFile(__DIR__ . '/note.xml'));
     }
 
     public function testFormatFileWithDestinationFile()
     {
-        $this->assertTrue($this->xmlFormater->formatFile(__DIR__.'/note.xml', vfsStream::url('myrootdir/note_format.xml')));
+        $this->assertTrue($this->xmlFormater->formatFile(__DIR__ . '/note.xml', vfsStream::url('root/note_format.xml')));
     }
 }
