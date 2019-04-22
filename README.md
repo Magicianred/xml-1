@@ -16,7 +16,7 @@ composer require odan/xml
 
 ## Requirements
 
-* PHP >= 7.0
+* PHP >= 7.1
 
 ## Security
 

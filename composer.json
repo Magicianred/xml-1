@@ -1,41 +1,42 @@
 {
-  "name": "odan/xml",
-  "type": "library",
-  "description": "Xml validator and beautifier",
-  "keywords": [
-    "library",
-    "xml",
-    "xsd",
-    "validation",
-    "beautifier",
-    "formater"
-  ],
-  "homepage": "http://github.com/odan/xml",
-  "license": "MIT",
-  "require": {
-    "php": ">=7.0",
-    "ext-dom": "*",
-    "ext-xml": "*"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^6.0",
-    "php-coveralls/php-coveralls": "dev-master",
-    "mikey179/vfsStream": "^1.6"
-  },
-  "scripts": {
-    "test": "phpunit",
-    "test-coverage": "phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
-    "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
-    "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit -n --no-patch 1 src tests"
-  },
-  "autoload": {
-    "psr-4": {
-      "Odan\\Xml\\": "src/Xml"
+    "name": "selective/xml",
+    "type": "library",
+    "description": "Xml validator and beautifier",
+    "keywords": [
+        "library",
+        "xml",
+        "xsd",
+        "validation",
+        "beautifier",
+        "formater"
+    ],
+    "homepage": "https://github.com/selective-php/xml",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "ext-dom": "*",
+        "ext-xml": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "php-coveralls/php-coveralls": "dev-master",
+        "mikey179/vfsstream": "^1.6"
+    },
+    "scripts": {
+        "test": "php vendor/phpunit/phpunit/phpunit",
+        "test-coverage": "php vendor/phpunit/phpunit/phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
+        "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
+        "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit -n src tests",
+        "phpstan": "php vendor/phpstan/phpstan/bin/phpstan analyse src tests --level=max -c phpstan.neon"
+    },
+    "autoload": {
+        "psr-4": {
+            "Selective\\Xml\\": "src/Xml"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Selective\\Test\\": "tests"
+        }
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Odan\\Test\\": "tests"
-    }
-  }
 }
