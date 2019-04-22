@@ -1,9 +1,9 @@
 <?php
 
-namespace Odan\Test;
+namespace Selective\Test;
 
 use DOMDocument;
-use Odan\Xml\XmlValidator;
+use Selective\Xml\XmlValidator;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 

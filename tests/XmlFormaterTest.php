@@ -1,8 +1,8 @@
 <?php
 
-namespace Odan\Test;
+namespace Selective\Test;
 
-use Odan\Xml\XmlFormater;
+use Selective\Xml\XmlFormater;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;

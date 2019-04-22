@@ -1,6 +1,6 @@
 <?php
 
-namespace Odan\Xml;
+namespace Selective\Xml;
 
 class XmlValidationResult
 {
