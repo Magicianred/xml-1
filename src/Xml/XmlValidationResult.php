@@ -2,6 +2,9 @@
 
 namespace Selective\Xml;
 
+/**
+ * Validation result
+ */
 class XmlValidationResult
 {
     /**
