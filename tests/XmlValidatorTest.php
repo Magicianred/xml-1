@@ -3,14 +3,17 @@
 namespace Selective\Test;
 
 use DOMDocument;
-use Selective\Xml\XmlValidator;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Selective\Xml\XmlValidator;
 
+/**
+ * Class XmlValidatorTest.
+ */
 class XmlValidatorTest extends TestCase
 {
     /**
-     * @var XmlValidator|null
+     * @var XmlValidator
      */
     protected $xmlValidator;
 
@@ -21,7 +24,8 @@ class XmlValidatorTest extends TestCase
 
     protected function tearDown()
     {
-        $this->xmlValidator = null;
+        unset($this->xmlValidator);
+        $this->xmlValidator = new XmlValidator();
     }
 
     public function testValidateFile()

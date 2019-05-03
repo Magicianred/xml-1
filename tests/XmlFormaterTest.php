@@ -2,32 +2,36 @@
 
 namespace Selective\Test;
 
-use Selective\Xml\XmlFormater;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
+use Selective\Xml\XmlFormater;
 
+/**
+ * Class XmlFormaterTest.
+ */
 class XmlFormaterTest extends TestCase
 {
     /**
-     * @var XmlFormater|null
+     * @var XmlFormater
      */
     protected $xmlFormater;
 
     /**
-     * @var vfsStreamDirectory|null
+     * @var vfsStreamDirectory
      */
     protected $root;
 
     protected function setUp()
     {
         $this->xmlFormater = new XmlFormater();
-        $this->root = vfsStream::setup("root");
+        $this->root = vfsStream::setup('root');
     }
 
     protected function tearDown()
     {
-        $this->xmlFormater = null;
+        unset($this->xmlFormater);
+        $this->xmlFormater = new XmlFormater();
     }
 
     public function testFormatString()

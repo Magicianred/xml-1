@@ -3,7 +3,7 @@
 namespace Selective\Xml;
 
 /**
- * Validation result
+ * Validation result.
  */
 class XmlValidationResult
 {

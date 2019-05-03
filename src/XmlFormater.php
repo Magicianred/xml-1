@@ -5,15 +5,15 @@ namespace Selective\Xml;
 use DOMDocument;
 
 /**
- * XmlFormater
+ * XmlFormater.
  */
 class XmlFormater
 {
-
     /**
-     * XML beautifier
+     * XML beautifier.
      *
      * @param string $content
+     *
      * @return string pretty XML string
      */
     public function formatString(string $content): string
@@ -28,10 +28,11 @@ class XmlFormater
     }
 
     /**
-     * File XML Beautifier
+     * File XML Beautifier.
      *
      * @param string $fileName
      * @param string $fileNameDestination
+     *
      * @return bool Success
      */
     public function formatFile($fileName, $fileNameDestination = null): bool

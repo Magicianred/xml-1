@@ -3,21 +3,60 @@
 namespace Selective\Xml;
 
 use DOMDocument;
+use RuntimeException;
 
 /**
- * Xml validator
+ * Xml validator.
  */
 class XmlValidator
 {
-
     /**
-     * Validate XML-File against XSD-File (Schema)
+     * Validate XML-File against XSD-File (Schema).
      *
-     * @param string $xmlFile
-     * @param string $xsdFile
+     * @param string $xmlFile xml filename
+     * @param string $xsdFile xsd filename
+     *
+     * @throws RuntimeException
+     *
      * @return XmlValidationResult[] if not valid an array with errors
      */
     public function validateFile(string $xmlFile, string $xsdFile): array
+    {
+        $content = file_get_contents($xmlFile);
+        if ($content === false) {
+            throw new RuntimeException(sprintf('File could no be read: %s', $xmlFile));
+        }
+
+        return $this->validateXml($content, $xsdFile);
+    }
+
+    /**
+     * Validate XML-File against XSD-File (Schema).
+     *
+     * @param DOMDocument $dom xml document
+     * @param string $xsdFile A string containing the schema
+     *
+     * @return XmlValidationResult[] if not valid an array with errors
+     */
+    public function validateDom(DOMDocument $dom, string $xsdFile): array
+    {
+        // Workaround for complex schemas with namespace
+        // Fixed: No matching global declaration available for
+        // the validation root error
+        $dom->loadXML($dom->saveXML());
+
+        return $this->validateXml($dom->saveXML(), $xsdFile);
+    }
+
+    /**
+     * Validate xml content against XSD file.
+     *
+     * @param string $xmlContent XML content
+     * @param string $xsdFile XSD filename
+     *
+     * @return XmlValidationResult[] if not valid an array with errors
+     */
+    public function validateXml(string $xmlContent, string $xsdFile): array
     {
         $result = [];
 
@@ -26,92 +65,79 @@ class XmlValidator
         libxml_clear_errors();
 
         $xml = new DOMDocument();
-        $xml->load($xmlFile);
-        if (!$xml->schemaValidate($xsdFile)) {
-            // Not valid
+        $wellFormed = $xml->loadXML($xmlContent);
 
-            $xmlLines = explode("\n", file_get_contents($xmlFile));
-            $errors = libxml_get_errors();
-            foreach ($errors as $error) {
-                $validation = new XmlValidationResult();
-                $validation->level = $error->level;
-                $validation->message = trim($error->message);
-                $validation->file = str_replace('file:///', '', $error->file);
-                $validation->line = $error->line;
-                $validation->content = '';
-
-                if (isset($xmlLines[$error->line - 1])) {
-                    $validation->content = trim($xmlLines[$error->line - 1]);
-                }
-                $validation->code = $error->code;
-                $validation->column = $error->column;
-
-                $result[] = $validation;
-            }
+        if (!$wellFormed) {
+            throw new RuntimeException(sprintf('XML content is not well formed'));
         }
-        libxml_clear_errors();
+
+        if (!$xml->schemaValidate($xsdFile)) {
+            $result = $this->getValidationErrors($xmlContent);
+        }
 
         return $result;
     }
 
     /**
-     * Validate XML-File against XSD-File (Schema)
+     * Get validation errors.
      *
-     * @param DOMDocument $xml xml document
-     * @param string $xsdSource A string containing the schema
-     * @return XmlValidationResult[] if not valid an array with errors
+     * @param string $content The xml content
+     *
+     * @return XmlValidationResult[] Error details
      */
-    public function validateDom(DOMDocument $xml, string $xsdSource): array
+    private function getValidationErrors(string $content): array
     {
-        $result = array();
+        $result = [];
 
-        // Enable user error handling
-        libxml_use_internal_errors(true);
-        libxml_clear_errors();
+        $xmlLines = explode("\n", $content);
+        $errors = libxml_get_errors();
 
-        // Workaround for complex schemas with namespace
-        // Fixed: No matching global declaration available for
-        // the validation root error
-        $xml->loadXML($xml->saveXML());
+        foreach ($errors as $error) {
+            $validation = new XmlValidationResult();
 
-        if (!$xml->schemaValidate($xsdSource)) {
-            // Not valid
-            $errors = libxml_get_errors();
-            foreach ($errors as $error) {
-                $validation = new XmlValidationResult();
+            $validation->level = $error->level;
+            $validation->message = trim($error->message);
+            $validation->file = str_replace('file:///', '', $error->file);
+            $validation->line = $error->line;
+            $validation->content = '';
+            $validation->code = $error->code;
+            $validation->column = $error->column;
 
-                $validation->level = $error->level;
-                $validation->message = trim($error->message);
-                $validation->file = str_replace('file:///', '', $error->file);
-                $validation->line = $error->line;
-                $validation->code = $error->code;
-                $validation->column = $error->column;
-                $result[] = $validation;
+            if (isset($xmlLines[$error->line - 1])) {
+                $validation->content = trim($xmlLines[$error->line - 1]);
             }
+
+            $result[] = $validation;
         }
-        libxml_clear_errors();
 
         return $result;
     }
 
     /**
      * Speeding up XML schema validations of a batch of
-     * XML files against the same XML schema (XSD) (13865149)
+     * XML files against the same XML schema (XSD) (13865149).
      *
      * @param string $path The temporary cache path
-     * @return void
+     * @param int $chmod chmod
+     *
+     * @throws RuntimeException
+     *
+     * @return string
      */
-    public function enableXsdCache(string $path)
+    public function enableXsdCache(string $path, $chmod = 0775): string
     {
-        libxml_set_external_entity_loader(function ($public, $system, $context) use ($path) {
+        libxml_set_external_entity_loader(static function ($public, $system, $context) use ($path, $chmod) {
             if (is_file($system)) {
                 echo $system;
+
                 return $system;
             }
 
             if (!file_exists($path)) {
-                mkdir($path, true);
-                chmod($path, 0775);
+                if (!mkdir($path, $chmod, true) && !is_dir($path)) {
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
+                }
+                chmod($path, $chmod);
             }
 
             $cachedFile = $path . '/' . sha1($system) . '_' . basename($system);
@@ -123,7 +149,7 @@ class XmlValidator
             $system = str_replace('file:/', '', $system);
             $content = file_get_contents($system);
             file_put_contents($cachedFile, $content);
-            chmod($cachedFile, 0775);
+            chmod($cachedFile, $chmod);
 
             return $cachedFile;
         });
