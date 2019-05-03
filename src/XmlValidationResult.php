@@ -5,40 +5,57 @@ namespace Selective\Xml;
 /**
  * Validation result.
  */
-class XmlValidationResult
+final class XmlValidationResult
 {
     /**
-     * @var int
+     * @var XmlValidationError[] errors
      */
-    public $level;
+    private $errors = [];
 
     /**
-     * @var string
+     * Add error.
+     *
+     * @param XmlValidationError $error The error
+     *
+     * @return self The result
      */
-    public $message;
+    public function withError(XmlValidationError $error): self
+    {
+        $clone = clone $this;
+        $clone->errors[] = clone $error;
 
-    /**
-     * @var string
-     */
-    public $file;
+        return $clone;
+    }
 
-    /**
-     * @var int
-     */
-    public $line;
+    public function getErrors(): array
+    {
+        $clone = clone $this;
 
-    /**
-     * @var string
-     */
-    public $content;
+        return $clone->errors;
+    }
 
-    /**
-     * @var int
-     */
-    public $code;
+    public function clear(): self
+    {
+        $clone = clone $this;
+        $clone->errors = [];
 
-    /**
-     * @var int
-     */
-    public $column;
+        return $clone;
+    }
+
+    public function isValid(): bool
+    {
+        return empty($this->errors);
+    }
+
+    public function isInvalid(): bool
+    {
+        return !empty($this->errors);
+    }
+
+    private function __clone()
+    {
+        foreach ($this->errors as $key => $value) {
+            $this->errors[$key] = clone $value;
+        }
+    }
 }

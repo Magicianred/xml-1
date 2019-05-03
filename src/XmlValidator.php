@@ -18,9 +18,9 @@ class XmlValidator
      *
      * @throws RuntimeException
      *
-     * @return XmlValidationResult[] if not valid an array with errors
+     * @return XmlValidationResult Xml validation result
      */
-    public function validateFile(string $xmlFile, string $xsdFile): array
+    public function validateFile(string $xmlFile, string $xsdFile): XmlValidationResult
     {
         $content = file_get_contents($xmlFile);
         if ($content === false) {
@@ -36,9 +36,9 @@ class XmlValidator
      * @param DOMDocument $dom xml document
      * @param string $xsdFile A string containing the schema
      *
-     * @return XmlValidationResult[] if not valid an array with errors
+     * @return XmlValidationResult Xml validation result
      */
-    public function validateDom(DOMDocument $dom, string $xsdFile): array
+    public function validateDom(DOMDocument $dom, string $xsdFile): XmlValidationResult
     {
         // Workaround for complex schemas with namespace
         // Fixed: No matching global declaration available for
@@ -54,11 +54,11 @@ class XmlValidator
      * @param string $xmlContent XML content
      * @param string $xsdFile XSD filename
      *
-     * @return XmlValidationResult[] if not valid an array with errors
+     * @return XmlValidationResult Xml validation result
      */
-    public function validateXml(string $xmlContent, string $xsdFile): array
+    public function validateXml(string $xmlContent, string $xsdFile): XmlValidationResult
     {
-        $result = [];
+        $result = new XmlValidationResult();
 
         // Enable user error handling
         libxml_use_internal_errors(true);
@@ -83,31 +83,31 @@ class XmlValidator
      *
      * @param string $content The xml content
      *
-     * @return XmlValidationResult[] Error details
+     * @return XmlValidationResult Error details
      */
-    private function getValidationErrors(string $content): array
+    private function getValidationErrors(string $content): XmlValidationResult
     {
-        $result = [];
-
         $xmlLines = explode("\n", $content);
         $errors = libxml_get_errors();
 
-        foreach ($errors as $error) {
-            $validation = new XmlValidationResult();
+        $result = new XmlValidationResult();
 
-            $validation->level = $error->level;
-            $validation->message = trim($error->message);
-            $validation->file = str_replace('file:///', '', $error->file);
-            $validation->line = $error->line;
-            $validation->content = '';
-            $validation->code = $error->code;
-            $validation->column = $error->column;
+        foreach ($errors as $error) {
+            $validationError = new XmlValidationError();
+
+            $validationError->level = $error->level;
+            $validationError->message = trim($error->message);
+            $validationError->file = str_replace('file:///', '', $error->file);
+            $validationError->line = $error->line;
+            $validationError->content = '';
+            $validationError->code = $error->code;
+            $validationError->column = $error->column;
 
             if (isset($xmlLines[$error->line - 1])) {
-                $validation->content = trim($xmlLines[$error->line - 1]);
+                $validationError->content = trim($xmlLines[$error->line - 1]);
             }
 
-            $result[] = $validation;
+            $result = $result->withError($validationError);
         }
 
         return $result;

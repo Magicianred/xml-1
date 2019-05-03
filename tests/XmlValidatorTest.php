@@ -30,21 +30,25 @@ class XmlValidatorTest extends TestCase
 
     public function testValidateFile()
     {
-        $this->assertInternalType('array', $this->xmlValidator->validateFile(__DIR__ . '/note.xml', __DIR__ . '/schema.xsd'));
+        $result = $this->xmlValidator->validateFile(__DIR__ . '/note.xml', __DIR__ . '/schema.xsd');
+        $this->assertTrue($result->isValid());
+        $this->assertFalse($result->isInvalid());
     }
 
     public function testValidateFileWithInvalidXsd()
     {
         $result = $this->xmlValidator->validateFile(__DIR__ . '/note.xml', __DIR__ . '/invalid_schema.xsd');
-        $this->assertInternalType('array', $result);
-        $this->assertSame(2, $result[0]->level);
+        $this->assertFalse($result->isValid());
+        $this->assertTrue($result->isInvalid());
+        $this->assertSame(2, $result->getErrors()[0]->level);
     }
 
     public function testValidateDom()
     {
         $xml = new DOMDocument();
         $xml->load(__DIR__ . '/note.xml');
-        $this->assertInternalType('array', $this->xmlValidator->validateDom($xml, __DIR__ . '/schema.xsd'));
+        $result = $this->xmlValidator->validateDom($xml, __DIR__ . '/schema.xsd');
+        $this->assertTrue($result->isValid());
     }
 
     public function testValidateDomWithInvalidXsd()
@@ -53,8 +57,8 @@ class XmlValidatorTest extends TestCase
         $xml->load(__DIR__ . '/note.xml');
         $result = $this->xmlValidator->validateDom($xml, __DIR__ . '/invalid_schema.xsd');
 
-        $this->assertInternalType('array', $result);
-        $this->assertSame(2, $result[0]->level);
+        $this->assertFalse($result->isValid());
+        $this->assertSame(2, $result->getErrors()[0]->level);
     }
 
     public function testEnableXsdCache()
@@ -63,12 +67,9 @@ class XmlValidatorTest extends TestCase
 
         $this->xmlValidator->enableXsdCache($path);
         $result = $this->xmlValidator->validateFile(__DIR__ . '/external.xml', __DIR__ . '/external.xsd');
-
-        $this->assertInternalType('array', $result);
-        $this->assertEmpty($result);
+        $this->assertTrue($result->isValid());
 
         $result = $this->xmlValidator->validateFile(__DIR__ . '/external.xml', __DIR__ . '/external.xsd');
-        $this->assertInternalType('array', $result);
-        $this->assertEmpty($result);
+        $this->assertTrue($result->isValid());
     }
 }
