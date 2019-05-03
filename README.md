@@ -20,11 +20,13 @@ composer require selective/xml
 
 ## Usage
 
+Validating an xml file against an xsd schema:
+
 ```php
 use Selective\Xml\XmlValidator;
 
 $xmlValidator = new XmlValidator();
-$xmlValidationErrors = xmlValidator->validateFile('file.xml', 'schema.xsd');
+$xmlValidationErrors = $xmlValidator->validateFile('file.xml', 'schema.xsd');
 
 if (empty($xmlValidationErrors)) {
     echo 'XML validation successful';
