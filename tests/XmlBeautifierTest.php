@@ -5,17 +5,17 @@ namespace Selective\Test;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
-use Selective\Xml\XmlFormater;
+use Selective\Xml\XmlBeautifier;
 
 /**
- * Class XmlFormaterTest.
+ * Test.
  */
-class XmlFormaterTest extends TestCase
+class XmlBeautifierTest extends TestCase
 {
     /**
-     * @var XmlFormater
+     * @var XmlBeautifier
      */
-    protected $xmlFormater;
+    protected $xmlBeautifier;
 
     /**
      * @var vfsStreamDirectory
@@ -24,35 +24,35 @@ class XmlFormaterTest extends TestCase
 
     protected function setUp()
     {
-        $this->xmlFormater = new XmlFormater();
+        $this->xmlBeautifier = new XmlBeautifier();
         $this->root = vfsStream::setup('root');
     }
 
     protected function tearDown()
     {
-        unset($this->xmlFormater);
-        $this->xmlFormater = new XmlFormater();
+        unset($this->xmlBeautifier);
+        $this->xmlBeautifier = new XmlBeautifier();
     }
 
-    public function testFormatString()
+    public function testBeautifyString()
     {
         $content = '<?xml version="1.0" encoding="UTF-8"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Do not forget me this weekend!</body></note>';
-        $dom = $this->xmlFormater->formatString($content);
+        $dom = $this->xmlBeautifier->beautifyString($content);
         $this->assertNotSame($content, $dom->saveXML());
     }
 
-    public function testFormatFileWithNoDestinationFile()
+    public function testBeautifyFileWithNoDestinationFile()
     {
         $content = file_get_contents(__DIR__ . '/note.xml');
-        $dom = $this->xmlFormater->formatFile(__DIR__ . '/note.xml');
+        $dom = $this->xmlBeautifier->beautifyFile(__DIR__ . '/note.xml');
         $this->assertNotSame($content, $dom->saveXML());
     }
 
-    public function testFormatFileWithDestinationFile()
+    public function testBeautifyFileWithDestinationFile()
     {
         $this->assertSame(
             165,
-            $this->xmlFormater->formatFile(__DIR__ . '/note.xml')->save(vfsStream::url('root/note_format.xml'))
+            $this->xmlBeautifier->beautifyFile(__DIR__ . '/note.xml')->save(vfsStream::url('root/note_format.xml'))
         );
     }
 }

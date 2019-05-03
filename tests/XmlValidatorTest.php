@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Selective\Xml\XmlValidator;
 
 /**
- * Class XmlValidatorTest.
+ * Test.
  */
 class XmlValidatorTest extends TestCase
 {

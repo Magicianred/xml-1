@@ -6,9 +6,9 @@ use DOMDocument;
 use RuntimeException;
 
 /**
- * XmlFormater.
+ * Xml beautifier.
  */
-class XmlFormater
+class XmlBeautifier
 {
     /**
      * XML beautifier.
@@ -19,7 +19,7 @@ class XmlFormater
      *
      * @return DOMDocument The formated DOMDocument
      */
-    public function formatString(string $content): DOMDocument
+    public function beautifyString(string $content): DOMDocument
     {
         $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
@@ -40,7 +40,7 @@ class XmlFormater
      *
      * @return DOMDocument The formated DOMDocument
      */
-    public function formatFile(string $fileName): DOMDocument
+    public function beautifyFile(string $fileName): DOMDocument
     {
         $content = file_get_contents($fileName);
         if ($content === false) {
