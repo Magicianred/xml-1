@@ -1,6 +1,8 @@
 filter:
     paths: ["src/*"]
-    excluded_paths: ["vendor/*", "tests/*"]
+    excluded_paths:
+        - "tests/"
+        - "vendor/"
 
 checks:
     php:
@@ -34,7 +36,7 @@ build:
     tests:
         before:
             -
-                command: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+                command: composer test-coverage
                 coverage:
                     file: 'build/logs/clover.xml'
                     format: 'clover'
