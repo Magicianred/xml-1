@@ -122,9 +122,9 @@ class XmlValidator
      *
      * @throws RuntimeException
      *
-     * @return string
+     * @return void
      */
-    public function enableXsdCache(string $path, $chmod = 0775): string
+    public function enableXsdCache(string $path, $chmod = 0775): void
     {
         libxml_set_external_entity_loader(static function ($public, $system, $context) use ($path, $chmod) {
             if (is_file($system)) {
