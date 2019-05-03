@@ -26,10 +26,12 @@ Validating an xml file against an xsd schema:
 use Selective\Xml\XmlValidator;
 
 $xmlValidator = new XmlValidator();
-$xmlValidationErrors = $xmlValidator->validateFile('file.xml', 'schema.xsd');
+$xmlValidationResult = $xmlValidator->validateFile('file.xml', 'schema.xsd');
 
-if (empty($xmlValidationErrors)) {
+if ($xmlValidationResult->isValid()) {
     echo 'XML validation successful';
+} else {
+    var_export($xmlValidationResult->getErrors());
 }
 ```
 
