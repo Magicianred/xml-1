@@ -37,16 +37,22 @@ class XmlFormaterTest extends TestCase
     public function testFormatString()
     {
         $content = '<?xml version="1.0" encoding="UTF-8"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Do not forget me this weekend!</body></note>';
-        $this->assertInternalType('string', $this->xmlFormater->formatString($content));
+        $dom = $this->xmlFormater->formatString($content);
+        $this->assertNotSame($content, $dom->saveXML());
     }
 
     public function testFormatFileWithNoDestinationFile()
     {
-        $this->assertTrue($this->xmlFormater->formatFile(__DIR__ . '/note.xml'));
+        $content = file_get_contents(__DIR__ . '/note.xml');
+        $dom = $this->xmlFormater->formatFile(__DIR__ . '/note.xml');
+        $this->assertNotSame($content, $dom->saveXML());
     }
 
     public function testFormatFileWithDestinationFile()
     {
-        $this->assertTrue($this->xmlFormater->formatFile(__DIR__ . '/note.xml', vfsStream::url('root/note_format.xml')));
+        $this->assertSame(
+            165,
+            $this->xmlFormater->formatFile(__DIR__ . '/note.xml')->save(vfsStream::url('root/note_format.xml'))
+        );
     }
 }

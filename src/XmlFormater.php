@@ -3,6 +3,7 @@
 namespace Selective\Xml;
 
 use DOMDocument;
+use RuntimeException;
 
 /**
  * XmlFormater.
@@ -14,38 +15,47 @@ class XmlFormater
      *
      * @param string $content
      *
-     * @return string pretty XML string
+     * $success
+     *
+     * @return DOMDocument The formated DOMDocument
      */
-    public function formatString(string $content): string
+    public function formatString(string $content): DOMDocument
     {
         $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
-        $xml->loadXML($content);
-        $result = $xml->saveXML();
+        $success = $xml->loadXML($content);
 
-        return $result;
+        if (!$success) {
+            throw new RuntimeException(sprintf('XML content is not well formed'));
+        }
+
+        return $xml;
     }
 
     /**
-     * File XML Beautifier.
+     * XML file beautifier.
      *
-     * @param string $fileName
-     * @param string $fileNameDestination
+     * @param string $fileName The xml filename
      *
-     * @return bool Success
+     * @return DOMDocument The formated DOMDocument
      */
-    public function formatFile($fileName, $fileNameDestination = null): bool
+    public function formatFile(string $fileName): DOMDocument
     {
+        $content = file_get_contents($fileName);
+        if ($content === false) {
+            throw new RuntimeException(sprintf('File could no be read: %s', $fileName));
+        }
+
         $xml = new DOMDocument();
         $xml->preserveWhiteSpace = false;
         $xml->formatOutput = true;
-        $xml->load($fileName);
-        if ($fileNameDestination === null) {
-            $fileNameDestination = $fileName;
-        }
-        $result = ($xml->save($fileNameDestination) !== false);
+        $success = $xml->loadXML($content);
 
-        return $result;
+        if (!$success) {
+            throw new RuntimeException(sprintf('XML content is not well formed'));
+        }
+
+        return $xml;
     }
 }
