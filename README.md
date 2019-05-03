@@ -18,6 +18,19 @@ composer require selective/xml
 
 * PHP >= 7.1
 
+## Usage
+
+````php
+use Selective\Xml\XmlValidator;
+
+$xmlValidator = new XmlValidator();
+$xmlValidationErrors = xmlValidator->validateFile('file.xml', 'schema.xsd');
+
+if (empty($xmlValidationErrors)) {
+    echo 'XML validation successful';
+}
+```
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
