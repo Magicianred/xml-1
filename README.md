@@ -20,7 +20,7 @@ composer require selective/xml
 
 ## Usage
 
-````php
+```php
 use Selective\Xml\XmlValidator;
 
 $xmlValidator = new XmlValidator();
